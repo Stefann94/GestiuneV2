@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestiune Stocuri | Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='hero.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='adauga-produs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='inventar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='rapoarte.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <main id="app">
+
+        <div id="hero-placeholder"></div>
+
+        <div class="container-dashboard">
+
+            <section class="quick-actions">
+
+                <h2 class="section-title">Acțiuni Rapide</h2>
+
+                <div class="actions-grid">
+
+                    <a href="javascript:void(0)" onclick="openModal()" class="action-card neon-border">
+                        <i class="fas fa-square-plus"></i>
+                        <div>
+                            <h3>Adaugă Produs</h3>
+                            <p>Introdu un articol nou în stoc</p>
+                        </div>
+                    </a>
+
+                    <a href="javascript:void(0)" onclick="openInventoryModal()" class="action-card">
+                        <i class="fas fa-clipboard-check"></i>
+                        <div>
+                            <h3>Audit Inventar</h3>
+                            <p>Verifică stocul și corectează neregulile</p>
+                        </div>
+                    </a>
+
+                    <a href="javascript:void(0)" onclick="openReportsModal()" class="action-card">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <div>
+                            <h3>Rapoarte</h3>
+                            <p>Generează statistici PDF/Excel</p>
+                        </div>
+                    </a>
+
+                </div>
+            </section>
+
+            <div class="dashboard-main-grid">
+
+                <div class="card analytics-card">
+
+                    <div class="card-header">
+                        <h3>Flux Stoc</h3>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+
+                    <div class="chart-wrapper">
+                        <canvas id="stockChart"></canvas>
+                    </div>
+
+                </div>
+
+                <div class="card alerts-card">
+                    <div class="card-header">
+                        <h3>Detector Pierderi Stoc</h3>
+                        <span class="badge badge-danger">0 Urgențe</span>
+                    </div>
+
+                    <div class="critical-list">
+                        <p style="padding: 1rem; color: #64748b;">Se încarcă datele...</p>
+                    </div>
+
+                    <a href="javascript:void(0)" onclick="openInventoryModal()" class="view-all">
+                        Verifică Audit Complet
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    
+    <div id="productModal" class="modal-overlay">
+
+        <div class="product-modal-styled">
+            <div class="modal-header-brand">
+                <div class="header-content">
+                    <h2><i class="fas fa-plus-circle"></i> Produs Nou</h2>
+                    <p>Introdu un articol nou și stabilește stocul inițial</p>
+                </div>
+                <span class="close-btn-white" onclick="closeModal()">&times;</span>
+            </div>
+
+            <div class="modal-body-padding">
+                <form id="addProductForm">
+                    <div class="grid-form">
+                        <div class="form-group full-width">
+                            <label>Nume Produs</label>
+                            <input type="text" name="name" placeholder="ex: Monitor LED 27 inch" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cod SKU (Unic)</label>
+                            <input type="text" name="sku" placeholder="ex: MON-LG-24-BK" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Preț Unitar (RON)</label>
+                            <input type="number" step="0.01" name="price" placeholder="0.00" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Stoc Sistem</label>
+                            <input type="number" name="system_stock" value="0" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Stoc Faptic</label>
+                            <input type="number" name="faptic_stock" value="0" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Alertă Stoc Minim</label>
+                            <input type="number" name="stock_min" value="5">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Categorie Produs</label>
+                            <select name="category_id" required class="select-styled">
+                                <option value="" disabled selected>Alege...</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-save-new full-width">
+                            <i class="fas fa-check"></i> Confirmă Adăugarea
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    
+    <div id="inventoryModal" class="modal-overlay">
+
+        <div class="inventory-modal-wide">
+
+            <div class="inventory-header-brand">
+
+                <div class="header-content">
+                    <h2><i class="fas fa-clipboard-check"></i> Audit Inventar</h2>
+                    <p>Verifică și sincronizează stocul de la raft cu cel din sistem</p>
+                </div>
+
+                <span class="close-audit-btn" onclick="closeInventoryModal()">&times;</span>
+
+            </div>
+
+            <div class="inventory-filters-nav">
+
+                <div
+                    style="display: flex; gap: 1rem; align-items: center; justify-content: flex-start; width: 100%; flex-wrap: wrap;">
+
+                    <div class="search-container-audit"
+                        style="position: relative; flex: 0 1 20rem; min-width: 12rem; max-width: 100%;">
+                        <i class="fas fa-search"
+                            style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: #10b981;"></i>
+                        <input type="text" id="inventorySearch" placeholder="Caută după nume sau SKU..."
+                            onkeyup="filterInventory()"
+                            style="width: 100%; padding: 0.5rem 0.5rem 0.5rem 2.25rem; box-sizing: border-box; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 0.6rem; font-size: 0.9rem; background: rgba(255, 255, 255, 0.1); color: white;">
+                    </div>
+
+                    <button class="btn-fix-stock" onclick="resetAllUnsavedChanges()"
+                        title="Mergi la analiza urgențelor">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Fix Stoc</span>
+                    </button>
+
+                </div>
+
+                <div class="filter-pills-audit">
+
+                    <button class="pill-audit active" data-filter="all" onclick="filterByStatus('all')">Toate</button>
+
+                    <button class="pill-audit" data-filter="shortage"
+                        onclick="filterByStatus('shortage')">Lipsă</button>
+
+                    <button class="pill-audit" data-filter="surplus"
+                        onclick="filterByStatus('surplus')">Surplus</button>
+
+                    <button class="pill-audit" data-filter="synced" onclick="filterByStatus('synced')">OK</button>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body-scroll">
+
+                <table id="inventoryTable">
+
+                    <thead>
+                        <tr>
+                            <th>Produs</th>
+                            <th>SKU</th>
+                            <th class="text-center">Sistem</th>
+                            <th class="text-center">Faptic</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-right">Acțiuni</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="inventoryTableBody">
+
+                        {% for p in products %}
+
+                        <tr class="product-row" data-id="{{ p.id }}"
+                            data-system-stock="{{ p.last_system_stock if p.last_system_stock is not none else p.current_calculated_stock }}"
+                            data-status="{{ p.last_audit_status or 'synced' }}">
+
+                            <td contenteditable="true" class="editable-name">{{ p.name }}</td>
+                            <td contenteditable="true" class="editable-sku"><code>{{ p.sku }}</code></td>
+
+                            <td class="text-center">
+                                <span class="system-stock-badge">
+                                    {# Afișăm sistemul înghețat la ultimul audit, sau cel calculat dacă n-a fost niciun
+                                    audit #}
+                                    {{ p.last_system_stock if p.last_system_stock is not none else
+                                    p.current_calculated_stock }}
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+                                <input type="number" class="faptic-input" {# Aici punem valoarea faptică salvată în DB,
+                                    altfel punem stocul curent #}
+                                    value="{{ p.last_faptic_value if p.last_faptic_value is not none else p.current_calculated_stock }}"
+                                    oninput="updateRowStatus(this)">
+                            </td>
+
+                            <td class="text-center">
+                                <span class="status-indicator {{ p.last_audit_status or 'synced' }}">
+                                    {% if p.last_audit_status == 'shortage' %}
+                                    Lipsă ({{ p.last_audit_diff | abs }})
+                                    {% elif p.last_audit_status == 'surplus' %}
+                                    Surplus ({{ p.last_audit_diff }})
+                                    {% else %}
+                                    OK
+                                    {% endif %}
+                                </span>
+                            </td>
+
+                            <td class="text-right">
+                                <div style="display:flex;gap:5px;justify-content:flex-end;">
+                                    <button class="btn-sync" onclick="saveAuditRow(this)"><i
+                                            class="fas fa-save"></i></button>
+                                    <button class="btn-delete" onclick="deleteProductRow(this,'{{ p.id }}')"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="reportsModal" class="modal-overlay">
+        <div class="reports-modal-wide">
+            <div class="reports-header">
+                <h2><i class="fas fa-chart-pie"></i> Sumar Audit Inventar</h2>
+                <span class="close-audit-btn" onclick="closeReportsModal()">&times;</span>
+            </div>
+
+            <div class="reports-summary-grid">
+                <div class="stat-box total">
+                    <span>Total Produse</span>
+                    <h4 id="rep-total-items">0</h4>
+                </div>
+                <div class="stat-box success">
+                    <span>Produse OK</span>
+                    <h4 id="rep-total-ok">0</h4>
+                </div>
+                <div class="stat-box danger">
+                    <span>Total Lipsă (Unități)</span>
+                    <h4 id="rep-total-short">0</h4>
+                </div>
+                <div class="stat-box warning">
+                    <span>Total Surplus (Unități)</span>
+                    <h4 id="rep-total-surplus">0</h4>
+                </div>
+            </div>
+
+            <div class="reports-actions-bar">
+                <p>Datele de mai jos reflectă situația curentă din baza de date.</p>
+                <div class="export-buttons">
+                    <button class="btn-export btn-pdf" onclick="exportData('pdf')">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                    <button class="btn-export btn-excel" onclick="exportData('excel')">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </button>
+                </div>
+            </div>
+
+            <div class="reports-table-container">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Produs</th>
+                            <th>SKU</th>
+                            <th>Status Audit</th>
+                            <th class="text-center">Diferență</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="ledgerModal" class="modal-overlay">
+        <div class="inventory-modal-wide">
+            <div class="inventory-header-brand" style="background: #064e3b;">
+                <div class="header-content">
+                    <h2><i class="fas fa-stream"></i> Istoric Operațiuni</h2>
+                    <p>Monitorizarea activității în timp real</p>
+                </div>
+                <span class="close-audit-btn" onclick="closeLedgerModal()">&times;</span>
+            </div>
+
+            <div class="modal-body-scroll" style="background: #f0fdf4;">
+                <div id="ledger-container" class="ledger-list">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer-placeholder"></div>
+
+    <script src="{{ url_for('static', filename='componente.js') }}"></script>
+    <script src="{{ url_for('static', filename='hero.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='adauga-produs.js') }}"></script>
+    <script src="{{ url_for('static', filename='inventar.js') }}"></script>
+    <script src="{{ url_for('static', filename='rapoarte.js') }}"></script>
+    <script>
+        window.addEventListener('load', () => {
+            // 1. Inițializăm Navbar-ul
+            if (typeof initNavbar === "function") initNavbar();
+
+            // 2. Pregătim datele utilizatorului (Jinja2)
+            // Folosim verificarea directă: dacă nu există în sesiune, trimitem string-ul 'null'
+            const currentUser = {
+                username: "{{ session.get('username') if session.get('username') else 'null' }}",
+                role: "{{ session.get('role') if session.get('role') else 'null' }}"
+            };
+
+            // 3. Singurul apel initHero necesar
+            if (typeof initHero === "function") {
+                // Preluăm statisticile (dacă stats există în contextul Python)
+                const totalItems = "{{ stats.total if stats else 0 }}";
+                const alertsCount = "{{ stats.alerts if stats else 0 }}";
+                const movesToday = "{{ stats.moves if stats else 0 }}";
+
+                initHero(
+                    totalItems,
+                    alertsCount,
+                    movesToday,
+                    currentUser
+                );
+            }
+
+            // 4. Inițializăm restul componentelor (Grafice)
+            if (typeof initDashboardCharts === "function") {
+                initDashboardCharts();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

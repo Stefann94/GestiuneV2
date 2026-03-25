@@ -1,0 +1,75 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #064e3b;
+    
+    color: #064e3b;
+    padding-top: 0;
+    
+}
+
+#app {
+    background-color: #f0fdf4;
+    min-height: 100vh;
+    position: relative;
+}
+
+.card {
+    background: #ffffff;
+    border-left: 5px solid #10b981;
+    
+    padding: 2rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 0.8rem;
+    border-bottom: 1px solid #ecfdf5;
+}
+
+li strong {
+    color: #059669;
+}
+
+
+body.modal-open {
+    overflow: hidden;
+    
+    padding-right: var(--scrollbar-width, 0px); 
+}
+
+
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    
+    
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto; 
+    padding: 20px;
+}
+
+
+.modal-content, .inventory-modal-wide, .reports-modal-wide {
+    max-height: 90vh;
+    overflow-y: auto; 
+}
+
+body.modal-open {
+    overflow: hidden;
+    padding-right: 15px; 
+}

@@ -1,0 +1,303 @@
+
+.container-dashboard {
+    padding: 2rem 6%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    color: #064e3b;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.action-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.action-card i {
+    font-size: 2rem;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.action-card h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #111827;
+}
+
+.action-card p {
+    margin: 0.2rem 0 0;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    border-color: #10b981;
+}
+
+
+.dashboard-main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 1.5rem;
+    align-items: stretch; 
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column; 
+    height: 400px; 
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-shrink: 0; 
+}
+
+.card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #374151;
+}
+
+
+.critical-list {
+    flex: 1; 
+    overflow-y: auto; 
+    padding-right: 8px; 
+    margin-bottom: 10px;
+}
+
+
+.critical-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.critical-list::-webkit-scrollbar-track {
+    background: #f9fafb;
+    border-radius: 10px;
+}
+
+.critical-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1; 
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.critical-list::-webkit-scrollbar-thumb:hover {
+    background: #10b981;
+}
+
+.critical-item {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.item-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.progress-bar-mini {
+    height: 6px; 
+    background: #f3f4f6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.progress-fill.red { background: #026618; }
+.progress-fill.orange { background: #f59e0b; }
+
+.view-all {
+    display: block;
+    margin-top: auto; 
+    padding-top: 10px;
+    text-align: center;
+    color: #10b981;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border-top: 1px solid #f3f4f6;
+}
+.critical-item .item-info span {
+    color: #59bd78 !important; 
+    font-size: 0.85rem;
+}
+
+.analytics-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-wrapper {
+    position: relative;
+    flex: 1; 
+    width: 100%;
+}
+
+#stockChart {
+    max-height: 100% !important;
+}
+
+
+@media (max-width: 1024px) {
+    .dashboard-main-grid {
+        grid-template-columns: 1fr;
+    }
+    .card {
+        height: auto; 
+        min-height: 400px;
+    }
+}
+
+.ledger-list { padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .ledger-item {
+        background: white;
+        border-radius: 0.8rem;
+        border-left: 5px solid #10b981;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    .ledger-summary {
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+    .ledger-summary:hover { background: #f9fafb; }
+    .ledger-type {
+        font-weight: 800;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 2rem;
+        text-transform: uppercase;
+    }
+    
+    .type-audit { background: #dcfce7; color: #059669; }
+    .type-stergere { background: #fee2e2; color: #dc2626; }
+    .type-adaugare { background: #e0f2fe; color: #0284c7; }
+
+.ledger-details {
+    display: none; 
+    padding: 1rem;
+    background: #f8fafc;
+    border-top: 1px dashed #e2e8f0;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+    .detail-box { background: white; padding: 0.5rem; border-radius: 0.4rem; border: 1px solid #e2e8f0; }
+    .detail-box label { display: block; font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
+    .detail-box span { font-weight: 700; color: #1e293b; }
+
+
+#ledgerModal .inventory-modal-wide {
+    max-width: 500px; 
+    width: 90%;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+
+.ledger-item {
+    background: white !important;
+    border: 1px solid #e2e8f0 !important; 
+    border-left: 1px solid #e2e8f0 !important; 
+    border-radius: 10px !important;
+    margin-bottom: 0.6rem !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.ledger-item:hover {
+    border-color: #10b981 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+
+.ledger-summary {
+    padding: 0.7rem 1rem !important;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    gap: 1rem;
+}
+
+
+.ledger-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.9rem;
+}
+
+
+.ledger-type {
+    font-size: 0.65rem !important;
+    padding: 0.2rem 0.5rem !important;
+    letter-spacing: 0.05em;
+    
+    
+    min-width: 100px;      
+    text-align: center;    
+    display: inline-block;
+    flex-shrink: 0;        
+}
+
+
+.ledger-details {
+    padding: 0.8rem !important;
+    background: #f8fafc !important;
+    gap: 0.6rem !important;
+}
+
+.detail-box {
+    padding: 0.4rem !important;
+}
+
+.detail-box label {
+    font-size: 0.6rem !important; 
+}

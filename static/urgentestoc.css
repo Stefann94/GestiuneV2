@@ -1,0 +1,252 @@
+
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); 
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+
+.analysis-modal {
+    width: 90vw;
+    max-width: 1000px;
+    height: 80vh;
+    background: #ffffff;
+    border-radius: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: modalAppear 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+
+.inventory-header-brand {
+    background: #064e3b;
+    padding: 1.5rem 2.5rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inventory-header-brand h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.close-modal {
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.2s ease-in-out;
+    color: rgba(255, 255, 255, 0.8);
+    user-select: none;
+    display: inline-block;
+}
+
+.close-modal:hover {
+    transform: scale(1.15);
+    color: #ef4444 !important; 
+}
+
+
+.modal-body-scroll {
+    flex: 1;
+    overflow-y: auto; 
+    padding: 1.5rem 2.5rem;
+    background: #f8fafc;
+}
+
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+}
+
+.col-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #064e3b;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+}
+
+
+.urgente-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0; 
+}
+
+.urgente-card {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #e2e8f0; 
+    border-radius: 0;
+    padding: 0.75rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.urgente-card:hover {
+    background: rgba(0,0,0,0.02);
+    transform: none; 
+    box-shadow: none;
+}
+
+.urgente-info {
+    flex: 1;
+}
+
+.urgente-info strong {
+    color: #1e293b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: block;
+}
+
+.urgente-info small {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.urgente-values {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.val-faptic {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.val-sistem {
+    color: #64748b;
+}
+
+
+.border-red, .border-orange, .border-yellow {
+    border-left: none !important;
+}
+
+
+@keyframes modalAppear {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 48rem) {
+    .analysis-grid {
+        grid-template-columns: 1fr;
+    }
+    .inventory-header-brand {
+        padding: 1rem 1.5rem;
+    }
+    .modal-body-scroll {
+        padding: 1rem 1.5rem;
+    }
+}
+
+
+.secondary-modal {
+    z-index: 10100;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+.mini-analysis-card {
+    width: clamp(18rem, 90%, 25rem); 
+    background: #ffffff;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+.mini-modal-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.product-label {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.95rem;
+    border-left: 0.25rem solid #064e3b;
+    padding-left: 0.75rem;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+
+.btn-primary {
+    background: #064e3b;
+    color: white;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.manual-input-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.manual-input-group input {
+    padding: 0.7rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.4rem;
+    outline: none;
+    font-size: 1rem;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid #064e3b;
+    color: #064e3b;
+    padding: 0.7rem 1rem;
+    border-radius: 0.4rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10%); }
+    to { opacity: 1; transform: translateY(0); }
+}

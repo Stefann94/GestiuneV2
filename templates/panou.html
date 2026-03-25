@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | StockMaster Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='panou.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='urgentestoc.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fixstoc.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='categorii.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='iesiri.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fluxiesiri.css') }}">
+
+</head>
+
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <main class="dashboard-container">
+        <header class="db-header">
+            <div class="welcome-text">
+                <h1>Sistem Gestiune <span class="text-gradient">Live</span></h1>
+                <p>Status operațional: <span class="status-chip online">Optim</span></p>
+            </div>
+
+        </header>
+
+        <section class="bento-grid-kpi">
+            <div class="kpi-card glass">
+                <div class="kpi-icon money"><i class="fas fa-wallet"></i></div>
+                <div class="kpi-info">
+                    <span class="label">Valoare Inventar</span>
+                    <h2 class="value" id="totalInventoryValue">
+                        {{ "{:,.2f}".format(valoare) }} <small>RON</small>
+                    </h2>
+                    <span class="trend up"><i class="fas fa-arrow-up"></i> 12% vs luna trecută</span>
+                </div>
+            </div>
+            <div class="kpi-card glass warning">
+                <div class="kpi-icon alert"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="kpi-info">
+                    <span class="label">Urgențe Stoc</span>
+                    <h2 class="value">{{ urgente }} <small>Produse</small></h2>
+                    <span class="trend neutral">Necesită reaprovizionare</span>
+                </div>
+            </div>
+            <div class="kpi-card glass info">
+                <div class="kpi-icon box"><i class="fas fa-layer-group"></i></div>
+                <div class="kpi-info">
+                    <span class="label">Categorii Active</span>
+                    <h2 class="value">{{ nr_categorii }}</h2>
+                    <span class="trend blue">Performanță optimă</span>
+                </div>
+            </div>
+            <div class="kpi-card glass activity">
+                <div class="kpi-icon chart"><i class="fas fa-bolt"></i></div>
+                <div class="kpi-info">
+                    <span class="label">Flux Ieșiri (24h)</span>
+                    <h2 class="value">{{ flux }} <small>Unități</small></h2>
+                    <span class="trend up"><i class="fas fa-fire"></i> Cerere ridicată</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="main-bento-grid">
+            <div class="bento-chart-area">
+                <div class="card glass-dark bento-full-card">
+                    <div class="card-header">
+                        <h3>Distribuție Valoare per Categorie</h3>
+                        <div class="chart-legend-custom" id="customLegend"></div>
+                    </div>
+                    <div class="bento-chart-wrapper">
+                        <canvas id="polarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-actions-sidebar">
+                <div class="card glass gradient-border bento-sub-card">
+                    <h3>Bulk Operations</h3>
+                    <div class="bulk-control">
+                        <p>Ajustează Preț Global (%)</p>
+                        <div class="fancy-input-group">
+                            <input type="number" id="bulkPricePercent" placeholder="0.00">
+                            <button class="btn-action" id="applyBulkPrice">Aplică</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card glass bento-sub-card">
+                    <div class="card-header-flex">
+                        <h3>Ajustări Recomandate</h3> 
+                    </div>
+                    <ul class="dead-stock-list">
+                        <li style="justify-content: center; padding: 20px;">Se încarcă datele...</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+    <div id="valoareModal" class="modal-overlay">
+        <div class="inventory-modal-wide analysis-modal">
+            <div class="inventory-header-brand">
+                <div>
+                    <h2><i class="fas fa-chart-line"></i> Analiză Detaliată Inventar</h2>
+                    <p>Top performanță și valoare activă</p>
+                </div>
+                <span class="close-audit-btn close-modal" onclick="closeModal('valoareModal')">&times;</span>
+            </div>
+
+            <div class="inventory-filters-nav">
+                <div class="filter-pills-audit">
+                    <span class="pill-audit active">Statistici Live</span>
+                </div>
+                <div class="text-white opacity-80">
+                    <i class="fas fa-clock"></i> Actualizat acum
+                </div>
+            </div>
+
+            <div class="modal-body-scroll">
+                <div class="analysis-grid">
+                    <div class="analysis-col">
+                        <h3 class="col-title"><i class="fas fa-money-bill-trend-up text-success"></i> Top 5 Cele mai
+                            Scumpe</h3>
+                        <div class="analysis-table-wrapper">
+                            <table id="tableScumpe">
+                                <thead>
+                                    <tr>
+                                        <th>Produs</th>
+                                        <th class="text-right">Preț Unitar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaScumpe">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="analysis-col">
+                        <h3 class="col-title"><i class="fas fa-fire text-orange"></i> Top 5 Cele mai Vândute</h3>
+                        <div class="analysis-table-wrapper">
+                            <table id="tableVandute">
+                                <thead>
+                                    <tr>
+                                        <th>Produs</th>
+                                        <th class="text-right">Unități Ieșite</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaVandute">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="urgenteModal" class="modal-overlay">
+        <div class="analysis-modal">
+            <div class="inventory-header-brand">
+                <div>
+                    <h2><i class="fas fa-exclamation-triangle"></i> Analiză Urgențe Stoc</h2>
+                    <p>Produse care necesită reaprovizionare imediată</p>
+                </div>
+                <span class="close-modal" onclick="closeFixStocModal()">&times;</span>
+            </div>
+
+            <div class="inventory-filters-nav">
+                <div class="filter-pills-audit">
+                    <span class="pill-audit active" onclick="switchTab('status')">Status Stocuri</span>
+                    <button class="pill-audit btn-fix-stoc" onclick="openFixStocModal()">
+                        <i class="fas fa-tools"></i> Fixare Stoc (Audit)
+                    </button>
+                </div>
+                <div class="text-white opacity-80">
+                    <i class="fas fa-bolt"></i> Verificare în timp real
+                </div>
+            </div>
+
+            <div class="modal-body-scroll">
+                <div class="analysis-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="analysis-col">
+                        <h3 class="col-title"><i class="fas fa-skull-crossbones text-red"></i> CRITIC (<= 0)</h3>
+                                <div id="col-critice" class="urgente-list"></div>
+                    </div>
+
+                    <div class="analysis-col">
+                        <h3 class="col-title"><i class="fas fa-hourglass-half text-orange"></i> LIMITAT (1-10)</h3>
+                        <div id="col-limitate" class="urgente-list"></div>
+                    </div>
+
+                    <div class="analysis-col">
+                        <h3 class="col-title">
+                            <i class="fa-solid fa-eye text-brand-green"></i> ATENȚIE (11-20)
+                        </h3>
+                        <div id="col-atentie" class="urgente-list"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="fixStocModal" class="modal-overlay">
+        <div class="analysis-modal modal-fix-stoc">
+            <div class="inventory-header-brand">
+                <div>
+                    <h2><i class="fas fa-tools"></i> Fixare Stoc & Audit</h2>
+                    <p>Corectare valori faptice vs sistem</p>
+                </div>
+                <span class="close-modal" onclick="closeFixStocModal()">&times;</span>
+            </div>
+
+            <div class="modal-body-scroll">
+                <div class="analysis-table-wrapper">
+                    <table class="table-fix">
+                        <thead>
+                            <tr>
+                                <th>Produs / SKU</th>
+                                <th>Stoc Sistem</th>
+                                <th>Stoc Real (Faptic)</th>
+                                <th>Preț Unitar</th>
+                                <th class="text-right">Acțiune</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-fixstoc">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="miniModalFix" class="modal-overlay secondary-modal">
+        <div class="mini-analysis-card">
+            <div class="inventory-header-brand">
+                <h2><i class="fas fa-tools"></i> Ajustare Stoc</h2>
+                <span class="close-modal" onclick="closeMiniModal()">&times;</span>
+            </div>
+
+            <div class="mini-modal-content">
+                <p id="miniModalInfo" class="product-label"
+                    style="font-weight: 700; color: #064e3b; margin-bottom: 15px;"></p>
+
+                <div class="action-rows">
+                    <div class="equalize-row"
+                        style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <button onclick="handleEqualize()" class="btn-save-audit" style="flex: 1;">
+                            <i class="fas fa-equals"></i> Egalează
+                        </button>
+                        <div class="system-actual-info" style="flex: 1; font-size: 0.9rem; color: #64748b;">
+                            Sistem actual: <strong>-</strong>
+                        </div>
+                    </div>
+
+                    <div class="manual-input-group" style="display: flex; gap: 10px;">
+                        <input type="number" id="manualStockInput" placeholder="Valoare faptică..."
+                            style="flex: 2; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
+                        <button onclick="handleManualValue()" class="btn-save-audit"
+                            style="flex: 1; background: #059669 !important;">
+                            Fixează
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="categoriiModal" class="modal-overlay">
+        <div class="analysis-modal">
+            <div class="inventory-header-brand">
+                <div>
+                    <h2><i class="fas fa-layer-group"></i> Analiză Categorii Active</h2>
+                    <p>Distribuția stocului și valorii pe departamente</p>
+                </div>
+                <span class="close-modal" onclick="closeCategoriiModal()">&times;</span>
+            </div>
+
+            <div class="modal-body-scroll">
+                <div class="categories-summary-grid" id="categoriesSummary">
+                </div>
+
+                <div class="analysis-table-wrapper" style="margin-top: 20px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nume Categorie</th>
+                                <th class="text-center">Nr. Produse</th>
+                                <th class="text-right">Preț Total (RON)</th>
+                                <th>Top Produs (Pierdere Stoc)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaCategoriiDetaliat">
+                            {% for cat in categorii_analiza %}
+                            <tr>
+                                <td><strong>{{ cat.nume }}</strong></td>
+                                <td class="text-center">{{ cat.nr_produse }}</td>
+                                <td class="text-right">{{ "{:,.2f}".format(cat.pret_total) }}</td>
+                                <td>
+                                    {% if cat.top_produs %}
+                                    <span class="text-danger">
+                                        <i class="fas fa-arrow-down"></i> {{ cat.top_produs.nume }}
+                                        <small>({{ cat.top_produs.diferenta }} buc. lipsă)</small>
+                                    </span>
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fluxModal" class="modal-overlay">
+        <div class="analysis-modal">
+            <div class="inventory-header-brand">
+                <div>
+                    <h2><i class="fas fa-bolt"></i> Monitorizare Flux Ieșiri (24h)</h2>
+                    <p>Comparație automată: Stoc Sistem vs Stoc Faptic</p>
+                </div>
+                <span class="close-modal" onclick="closeFluxModal()">&times;</span>
+            </div>
+
+            <div class="inventory-filters-nav">
+                <div class="filter-pills-audit">
+
+                </div>
+                <div class="opacity-80">
+                    <span id="countIesiri">0 produse</span>
+                </div>
+            </div>
+
+            <div class="modal-body-scroll">
+                <div id="recentIesiriContent">
+                </div>
+
+                <div
+                    style="margin-top: 20px; padding: 15px; border-radius: 10px; background: #edffeb; border: 1px solid #c9fec7;">
+                    <p style="font-size: 0.85rem; color: #043014; margin: 0;">
+                        <i class="fas fa-info-circle"></i>
+                        Unitățile ieșite reprezintă diferența negativă dintre ceea ce raportați la raft și ce apare în
+                        baza de date.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="confirmBulkModal" class="modal-overlay secondary-modal">
+        <div class="mini-analysis-card" style="max-width: 400px; text-align: center;">
+            <div class="inventory-header-brand">
+                <h2><i class="fas fa-exclamation-triangle text-orange"></i> Confirmare Modificare</h2>
+            </div>
+            <div class="mini-modal-content" style="padding: 20px;">
+                <p id="confirmBulkMessage"
+                    style="font-size: 1.1rem; color: #1e293b; margin-bottom: 25px; line-height: 1.5;"></p>
+                <div style="display: flex; gap: 10px;">
+                    <button id="cancelBulkBtn" class="btn-save-audit"
+                        style="background: #94a3b8 !important; flex: 1;">Anulează</button>
+                    <button id="confirmBulkBtn" class="btn-save-audit"
+                        style="background: #dc2626 !important; flex: 1;">Da, Aplică</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='componente.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="{{ url_for('static', filename='panou.js') }}"></script>
+    <script src="{{ url_for('static', filename='urgentestoc.js') }}"></script>
+    <script src="{{ url_for('static', filename='fixstoc.js') }}"></script>
+    <script src="{{ url_for('static', filename='categorii.js') }}"></script>
+    <script src="{{ url_for('static', filename='iesiri.js') }}"></script>
+    <script src="{{ url_for('static', filename='fluxiesiri.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof window.initCommonComponents === 'function') {
+                window.initCommonComponents();
+            }
+        });
+    </script>
+</body>
+
+</html>
