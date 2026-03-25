@@ -33,10 +33,25 @@ body.dark-mode .kpi-info .value {
     color: #f1f5f9;
 }
 
-body.dark-mode .kpi-icon.money { background: #064e3b; color: #34d399; }
-body.dark-mode .kpi-icon.alert { background: #451a1a; color: #f87171; }
-body.dark-mode .kpi-icon.box { background: #1e1b4b; color: #a5b4fc; }
-body.dark-mode .kpi-icon.chart { background: #422006; color: #fbbf24; }
+body.dark-mode .kpi-icon.money {
+    background: #064e3b;
+    color: #34d399;
+}
+
+body.dark-mode .kpi-icon.alert {
+    background: #451a1a;
+    color: #f87171;
+}
+
+body.dark-mode .kpi-icon.box {
+    background: #1e1b4b;
+    color: #a5b4fc;
+}
+
+body.dark-mode .kpi-icon.chart {
+    background: #422006;
+    color: #fbbf24;
+}
 
 body.dark-mode .card {
     background: #1e293b;
@@ -261,7 +276,9 @@ body.dark-mode .details-grid .detail-item label {
 }
 
 body.dark-mode .details-grid .detail-item span {
-    color: #e2e8f0;
+    color: #10b981 !important;
+    background-color: #1e293b;
+    border: 1px solid #0f172a;
 }
 
 body.dark-mode .form-grid label {
@@ -809,7 +826,7 @@ body.dark-mode .fancy-input-group {
 }
 
 body.dark-mode .receptii-list .kpi-card,
-body.dark-mode .receptii-list > div {
+body.dark-mode .receptii-list>div {
     background: #0f172a;
     border-color: #334155;
     color: #e2e8f0;
@@ -1098,6 +1115,6 @@ body.dark-mode .chart-section {
 }
 
 body.dark-mode .receptie-btn {
-    background:#0f172a;
-    color:#10b981;
+    background: #0f172a;
+    color: #10b981;
 }
