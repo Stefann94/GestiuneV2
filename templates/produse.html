@@ -16,20 +16,45 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='categorii.css') }}">
 
     <style>
-        
         .modal-overlay {
             z-index: 1000;
         }
 
         #confirmDeleteModal {
             z-index: 9999 !important;
-            
         }
 
         #confirmDeleteModal .analysis-modal {
             z-index: 10000 !important;
             background: white;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        #categoryProductsModal .analysis-modal {
+            width: 90vw !important;
+            max-width: 900px !important;
+            height: 75vh !important;
+            min-height: 75vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        #categoryProductsModal .modal-body-scroll {
+            flex: 1;
+            overflow-y: auto;
+            max-height: none;
+            padding: 1.5rem 2rem;
+        }
+
+        #categoryProductsModal .analysis-table-wrapper {
+            overflow-x: auto;
+        }
+
+        #categoryProductsModal thead {
+            position: sticky;
+            top: 0;
+            background: #f1f5f9;
+            z-index: 10;
         }
     </style>
 </head>
@@ -89,10 +114,10 @@
                 </div>
                 <span class="close-modal" onclick="closeModal('categoryProductsModal')">&times;</span>
             </div>
-            <div class="modal-body-scroll" style="max-height: 70vh; overflow-y: auto;">
+            <div class="modal-body-scroll">
                 <div class="analysis-table-wrapper">
                     <table class="main-table">
-                        <thead style="position: sticky; top: 0; background: #f1f5f9; z-index: 10;">
+                        <thead>
                             <tr>
                                 <th>Cod (SKU)</th>
                                 <th>Denumire Produs</th>

@@ -140,6 +140,23 @@ body {
 .dead-stock-list {
     list-style: none;
     margin-top: 1.5rem;
+    max-height: 180px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.dead-stock-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.dead-stock-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dead-stock-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
 }
 
 .dead-stock-list li {
@@ -548,17 +565,19 @@ body.modal-open {
 
 .bento-actions-sidebar {
     display: grid;
-    grid-template-rows: 1fr 1fr; 
+    grid-template-rows: auto 1fr;
     gap: 24px;
+    max-height: 520px;
 }
 
 
 .bento-sub-card {
     display: flex;
     flex-direction: column;
-    justify-content: center; 
     padding: 24px;
-    margin: 0 !important; 
+    margin: 0 !important;
+    overflow: hidden;
+    min-height: 0;
 }
 
 
