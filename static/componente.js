@@ -24,6 +24,10 @@ window.initCommonComponents = function () {
 <li><a href="javascript:void(0)" onclick="openEmployeesModal()"><i class="fas fa-users-cog"></i><span>Angajați</span></a></li>
 </ul>
 
+<button class="dark-toggle" id="darkModeToggle" title="Dark Mode">
+<i class="fas fa-moon"></i>
+</button>
+
 <div class="navbar-auth">
 
 <div class="auth-buttons" id="authButtons">
@@ -599,4 +603,19 @@ html { scrollbar-gutter: stable; }
             });
         }
     });
+
+    const darkToggle = document.getElementById('darkModeToggle');
+    if (darkToggle) {
+        if (localStorage.getItem('stockmaster_darkmode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        darkToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('stockmaster_darkmode', isDark);
+            darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+    }
 };
