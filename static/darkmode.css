@@ -1022,7 +1022,7 @@ body.dark-mode .ledger-summary small {
 }
 
 body.dark-mode .ledger-summary .ledger-type {
-    color: inherit;
+    background-color: #064e3b;
 }
 
 body.dark-mode .ledger-details {
@@ -1095,4 +1095,9 @@ body.dark-mode .intrari-detail-card {
 
 body.dark-mode .chart-section {
     background: transparent;
+}
+
+body.dark-mode .receptie-btn {
+    background:#0f172a;
+    color:#10b981;
 }
