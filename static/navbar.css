@@ -197,9 +197,9 @@
 
 
 .navbar,
-.navbar *,
+.navbar *:not(.dark-toggle),
 #navbar-placeholder,
-#navbar-placeholder * {
+#navbar-placeholder *:not(.dark-toggle) {
     border-bottom: none !important;
     text-decoration: none !important;
 }

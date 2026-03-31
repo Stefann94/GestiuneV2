@@ -400,7 +400,7 @@ body.dark-mode #confirmDeleteModal p {
 
 .dark-toggle {
     background: transparent;
-    border: 1.5px solid rgba(167, 243, 208, 0.3);
+    border: 1.5px solid rgba(167, 243, 208, 0.3) !important;
     color: #a7f3d0;
     width: 2.5rem;
     height: 2.5rem;
@@ -412,6 +412,7 @@ body.dark-mode #confirmDeleteModal p {
     font-size: 1.1rem;
     transition: all 0.3s ease;
     flex-shrink: 0;
+    margin: 0 1rem;
 }
 
 .dark-toggle:hover {
@@ -423,13 +424,13 @@ body.dark-mode #confirmDeleteModal p {
 
 body.dark-mode .dark-toggle {
     background: rgba(250, 204, 21, 0.1);
-    border-color: rgba(250, 204, 21, 0.4);
+    border-color: rgba(250, 204, 21, 0.4) !important;
     color: #fbbf24;
 }
 
 body.dark-mode .dark-toggle:hover {
     background: rgba(250, 204, 21, 0.2);
-    border-color: #fbbf24;
+    border-color: #fbbf24 !important;
 }
 
 

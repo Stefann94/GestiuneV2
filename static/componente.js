@@ -123,13 +123,24 @@ Logout
 <style>
 html { scrollbar-gutter: stable; }
 
-.navbar { display: flex; align-items: center; padding: 0 2rem; }
+.navbar { 
+    display: flex; 
+    align-items: center; 
+    padding: 0 6%; 
+    height: 5.5rem;
+    gap: 1.5rem;
+}
+
+.dark-toggle {
+    margin: 0;
+    align-self: center;
+}
 
 .navbar-auth {
     margin-left: auto;
-    padding-left: 2rem;
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
 
 .user-info { display: flex; align-items: center; gap: 1.5rem; flex-wrap: nowrap; }
